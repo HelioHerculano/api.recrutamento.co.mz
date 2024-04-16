@@ -1,21 +1,21 @@
 <?php
 
-namespace App\Http\Controllers\Candidate;
+namespace App\Http\Controllers\Application;
 
 use App\Http\Controllers\ApiController;
 use App\Http\Controllers\Controller;
-use App\Models\Candidate;
+use App\Models\Application;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 
-class CandidateController extends ApiController
+class ApplicationController extends ApiController
 {
     /**
      * Display a listing of the resource.
      */
     public function index()
     {
-        $query = Candidate::when(request('name'), function($query){
+        $query = Application::when(request('name'), function($query){
             if(!empty(request('name'))) {
                 $query->where('name', 'like', '%'.request('name').'%');
             }
@@ -39,7 +39,7 @@ class CandidateController extends ApiController
             }
         });
 
-        $query = $query->with(['neighborhood.province.country','employeeType','experiences','trainings','applications.job']);
+        $query = $query->with(['candidate','job']);
 
         return $query->paginate(10);
     }
@@ -58,46 +58,13 @@ class CandidateController extends ApiController
     public function store(Request $request)
     {
         $roles = [
-          'name' => 'required',
-          'email' => 'required',
-          'contact' => 'required',
-          'birth_date' => 'required',
-        //   'approved_status' => 'required',
-          'current_company' => 'required',
-          'current_position' => 'required',
-          'address' => 'required',
-          'marital_status' => 'required',
-        //   'have_children' => 'required',
-        //   'remote_job' => 'required',
-        //   'for_travel' => 'required',
-          'salary_expectation' => 'required',
-          'current_salary' => 'required',
-        //   'recruiter_assessment' => 'required',
-          'benefits' => 'required',
-          'country_id' => 'required',
-          'other_country_id' => 'required',
-          'province_id' => 'required',
-          'neighborhoods_id' => 'required',
-          'employee_type_id' => 'required',
+          'candidate_id' => 'required',
+          'job_id' => 'required',
         ];
 
         $attributes = [
-            'name'=>'nome',
-            'contact'=>'contacto',
-            'birth_date'=>'data de nascimento',
-            'current_company'=>'empresa actual',
-            'current_position'=>'posição actual',
-            'address'=>'endereço',
-            'marital_status'=>'estado civil',
-            'salary_expectation'=>'expectativa salarial',
-            'current_salary'=> 'salario actual',
-            'recruiter_assessment'=>'avaliação do recrutador',
-            'benefits' => 'benificios',
-            'country_id' => 'pais',
-            'other_country_id' => 'outro pais',
-            'province_id' => 'provincia',
-            'neighborhoods_id' => 'bairros',
-            'employee_type_id' => 'tipo proficional'
+            'candidate_id' => '"candidato"',
+            'job_id' => '"vaga"'
         ];
 
         $costumMessages = [
@@ -110,9 +77,9 @@ class CandidateController extends ApiController
             return $this->errorResponse($validator->errors(),422);
         }
 
-        $newCandidate = Candidate::create($request->all());
+        $newApplication = Application::create($request->all());
 
-        return $this->showOne($newCandidate);
+        return $this->showOne($newApplication);
     }
 
     /**
