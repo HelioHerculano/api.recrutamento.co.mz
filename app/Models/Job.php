@@ -16,4 +16,8 @@ class Job extends Model
         'designation',
         'area_id',
     ];
+
+    public function area(){
+        return $this->belongsTo(Area::class);
+    }
 }

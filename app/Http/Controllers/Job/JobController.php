@@ -15,7 +15,33 @@ class JobController extends ApiController
      */
     public function index()
     {
-        //
+        $query = Job::when(request('name'), function($query){
+            if(!empty(request('name'))) {
+                $query->where('name', 'like', '%'.request('name').'%');
+            }
+        });
+
+        $query = $query->when(request('nuit'), function ($query){
+            if(!empty(request('nuit'))) {
+                $query->where('nuit', '=', request('nuit'));
+            }
+        });
+
+        $query = $query->when(request('origin_id'), function ($query){
+            if(!empty(request('origin_id'))) {
+                $query->where('origin_id', '=', request('origin_id'));
+            }
+        });
+
+        $query = $query->when(request('status'), function ($query){
+            if(!empty(request('status'))) {
+                $query->where('status', '=', request('status'));
+            }
+        });
+
+        $query = $query->with(['area']);
+
+        return $query->paginate(10);
     }
 
     /**
