@@ -2,10 +2,12 @@
 
 namespace App\Http\Controllers\Attachment;
 
+use App\Http\Controllers\ApiController;
 use App\Http\Controllers\Controller;
+use App\Models\Attachment;
 use Illuminate\Http\Request;
 
-class AttachmentController extends Controller
+class AttachmentController extends ApiController
 {
     /**
      * Display a listing of the resource.
@@ -28,7 +30,15 @@ class AttachmentController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $attachment = $this->saveAttachment($request->attachment,'attachments');
+
+        $attachment = Attachment::create([
+            'path' => $attachment,
+            'document_type_id' => $request->document_type_id,
+            'candidate_id' => $request->candidate_id
+        ]);
+
+        return $this->showOne($attachment);
     }
 
     /**

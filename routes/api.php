@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Application\ApplicationController;
+use App\Http\Controllers\Attachment\AttachmentController;
 use App\Http\Controllers\Candidate\CandidateController;
 use App\Http\Controllers\Experience\ExperienceController;
 use App\Http\Controllers\Job\JobController;
@@ -41,6 +42,8 @@ Route::resource('candidate',CandidateController::class)->except(['create','edit'
 Route::resource('experience',ExperienceController::class)->except(['create','edit']);
 Route::resource('training',TrainingController::class)->except(['create','edit']);
 Route::resource('application',ApplicationController::class)->except(['create','edit']);
+
+Route::resource('attachment',AttachmentController::class)->except(['create','edit']);
 
 // Route::get('/',function(){
 //     return "ksdjdsj";
