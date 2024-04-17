@@ -16,7 +16,8 @@ class Controller extends BaseController
             return null;
         }
 
-        $attachment->store('',$path);
-        dd($attachment);
+        $path = $attachment->store('',$path);
+        return $path;
+
     }
 }
