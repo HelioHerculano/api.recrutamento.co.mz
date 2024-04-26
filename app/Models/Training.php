@@ -16,6 +16,7 @@ class Training extends Model
         'end_date',
         'training_type_id',
         'candidate_id',
+        'certificate_path'
     ];
 
     public function trainingType(){

@@ -8,4 +8,9 @@ use Illuminate\Database\Eloquent\Model;
 class DocumentType extends Model
 {
     use HasFactory;
+
+    public function attachments(){
+        return $this->hasMany(Attachment::class);
+    }
+
 }

@@ -15,9 +15,10 @@ class Controller extends BaseController
         if(!$attachment){
             return null;
         }
-
-        $path = $attachment->store('',$path);
-        return $path;
-
+        // save image
+        $filename = \Storage::disk($path)->put('', $attachment);
+        //return the path
+        // Url is the base url exp: localhost:8000
+        return URL::to('/').'/storage/'.$path.'/'.$filename;
     }
 }

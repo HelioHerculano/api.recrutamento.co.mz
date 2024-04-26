@@ -23,6 +23,7 @@ return new class extends Migration
             $table->string('current_position')->nullable();
             $table->string('address')->nullable();
             $table->enum("marital_status",[Candidate::SINGLE,Candidate::MARRIED,Candidate::WIDOWER])->nullable();
+            $table->enum("gender",['M','F'])->nullable();
             $table->boolean("have_children")->default(0);
             $table->boolean("remote_job")->default(0);
             $table->boolean("for_travel")->default(0);
@@ -33,14 +34,14 @@ return new class extends Migration
             $table->foreignId('country_id');
             $table->foreignId('other_country_id')->nullable();
             $table->foreignId('province_id');
-            $table->foreignId('neighborhood_id')->nullable();
-            $table->foreignId('employee_type_id');
+            $table->foreignId('district_id')->nullable();
+            $table->foreignId('employee_type_id')->nullable();
             $table->timestamps();
 
             $table->foreign("country_id")->references("id")->on('countries');
             $table->foreign("other_country_id")->references("id")->on('countries');
             $table->foreign("province_id")->references("id")->on('provinces');
-            $table->foreign("neighborhood_id")->references("id")->on('neighborhoods');
+            $table->foreign("district_id")->references("id")->on('districts');
             $table->foreign("employee_type_id")->references("id")->on('employee_types');
         });
     }

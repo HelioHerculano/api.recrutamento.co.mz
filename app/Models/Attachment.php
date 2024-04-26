@@ -14,4 +14,11 @@ class Attachment extends Model
         'document_type_id',
         'candidate_id'
     ];
+    public function documentType(){
+        return $this->belongsTo(DocumentType::class);
+    }
+
+    public function candidate(){
+        return $this->belongsTo(Candidate::class);
+    }
 }

@@ -113,4 +113,10 @@ class JobController extends ApiController
     {
         //
     }
+
+    public function getJobByArea($area_id){
+        $job = Job::where('area_id',$area_id)->get();
+
+        return $this->showAll($job);
+    }
 }

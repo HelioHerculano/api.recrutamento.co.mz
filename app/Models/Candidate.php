@@ -27,6 +27,7 @@ class Candidate extends Model
         'current_company',
         'current_position',
         'address',
+        'nuit',
         'marital_status',
         'salary_expectation',
         'current_salary',
@@ -34,8 +35,12 @@ class Candidate extends Model
         'country_id',
         'other_country_id',
         'province_id',
-        'neighborhood_id',
-        'employee_type_id'
+        'district_id',
+        'employee_type_id',
+        'gender',
+        'remote_job',
+        'for_travel',
+        'have_children'
     ];
 
     public function country(){
@@ -50,8 +55,8 @@ class Candidate extends Model
         return $this->belongsTo(Province::class);
     }
 
-    public function neighborhood(){
-        return $this->belongsTo(Neighborhood::class);
+    public function district(){
+        return $this->belongsTo(District::class);
     }
 
     public function employeeType(){
@@ -68,6 +73,10 @@ class Candidate extends Model
 
     public function applications(){
         return $this->hasMany(Application::class);
+    }
+
+    public function attachments(){
+        return $this->hasMany(Attachment::class);
     }
 
 }

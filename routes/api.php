@@ -1,11 +1,17 @@
 <?php
 
 use App\Http\Controllers\Application\ApplicationController;
+use App\Http\Controllers\Area\AreaController;
 use App\Http\Controllers\Attachment\AttachmentController;
 use App\Http\Controllers\Candidate\CandidateController;
+use App\Http\Controllers\Country\CountryController;
+use App\Http\Controllers\District\DistrictController;
+use App\Http\Controllers\DocumentType\DocumentTypeController;
 use App\Http\Controllers\Experience\ExperienceController;
 use App\Http\Controllers\Job\JobController;
+use App\Http\Controllers\Province\ProvinceController;
 use App\Http\Controllers\Training\TrainingController;
+use App\Http\Controllers\TrainingType\TrainingTypeController;
 use App\Http\Controllers\User\UserController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -36,15 +42,33 @@ Route::controller(UserController::class)->group(function(){
     Route::put('user/{id}/active','active');
 });
 
+Route::group(['middleware' => ['auth:sanctum']], function(){
+    Route::post('/logout',[UserController::class,'logout']);
+    Route::get('candidateApplications', [CandidateController::class,'candidateApplications']);
+    Route::get('candidateApplications/{id}', [CandidateController::class,'candidateApplicationsById']);
+});
 
+Route::get('job/{area_id}', [JobController::class,'getJobByArea']);
 Route::resource('job',JobController::class)->except(['create','edit']);
+
 Route::resource('candidate',CandidateController::class)->except(['create','edit']);
 Route::resource('experience',ExperienceController::class)->except(['create','edit']);
 Route::resource('training',TrainingController::class)->except(['create','edit']);
+
 Route::resource('application',ApplicationController::class)->except(['create','edit']);
 
 Route::resource('attachment',AttachmentController::class)->except(['create','edit']);
 
-// Route::get('/',function(){
-//     return "ksdjdsj";
-// });
+Route::post('attachment/temp',[AttachmentController::class,'upload']);
+
+Route::resource('country',CountryController::class)->except(['create','edit']);
+
+Route::get('province/{country_id}', [ProvinceController::class,'getByCountry']);
+Route::get('district/{province_id}', [DistrictController::class,'getByProvince']);
+
+Route::resource('trainingType',TrainingTypeController::class)->except(['create','edit']);
+
+Route::resource('documentType',DocumentTypeController::class)->except(['create','edit']);
+
+Route::resource('area',AreaController::class)->except(['create','edit']);
+

@@ -1,13 +1,13 @@
 <?php
 
-namespace App\Http\Controllers\Attachment;
+namespace App\Http\Controllers\District;
 
 use App\Http\Controllers\ApiController;
 use App\Http\Controllers\Controller;
-use App\Models\Attachment;
+use App\Models\District;
 use Illuminate\Http\Request;
 
-class AttachmentController extends ApiController
+class DistrictController extends ApiController
 {
     /**
      * Display a listing of the resource.
@@ -30,19 +30,7 @@ class AttachmentController extends ApiController
      */
     public function store(Request $request)
     {
-
-        if ($request->hasFile('attachment')) {
-            $attachment = $request->file('attachment');
-            $path = $this->saveAttachment($attachment,'attachments');
-        }
-
-        $attachment = Attachment::create([
-            'path' => $path,
-            'document_type_id' => $request->document_type_id,
-            'candidate_id' => $request->candidate_id
-        ]);
-
-        return $this->showOne($attachment);
+        //
     }
 
     /**
@@ -76,14 +64,10 @@ class AttachmentController extends ApiController
     {
         //
     }
-    public function upload(Request $request)
-    {
 
-        if ($request->hasFile('attachment')) {
-            $attachment = $request->file('attachment');
-            $path = $this->saveAttachment($attachment,'attachments');
-        }
+    public function getByProvince($province_id){
+        $district = District::where('province_id',$province_id)->get();
 
-        return response()->json(["path"=>$path],200);
+        return $this->showAll($district);
     }
 }
