@@ -168,7 +168,7 @@ class CandidateController extends ApiController
             $query = $query->whereHas('applications');
 
             $query = $query->with(['district.province.country','employeeType','experiences','trainings','applications.job']);
-            
+
             $query = $query->orderBy('id','desc');
 
             return $query->paginate(5);
@@ -423,5 +423,34 @@ class CandidateController extends ApiController
             ];
             return $this->errorResponse($response,401);
         }
+    }
+
+    public function verifyData(Request $request){
+
+        if(!empty(request('email'))) {
+            $verify = Candidate::where('email',$request->email)->first();
+        }
+
+        if(!empty(request('nuit'))) {
+            $verify = Candidate::where('nuit',$request->nuit)->first();
+        }
+
+        if(!empty(request('contact'))) {
+            $verify = Candidate::where('contact','+'.$request->contact)->first();
+        }
+
+        if($verify != null){
+            return response()->json(["approved"=>false]);
+        }else{
+            return response()->json(["approved"=>true]);
+        }
+    }
+
+    public function logout(){
+        auth()->user()->tokens()->delete();
+        return response([
+            'success' => true,
+            'message' => 'Logout success.'
+        ],200);
     }
 }

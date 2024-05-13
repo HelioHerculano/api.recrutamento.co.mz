@@ -71,15 +71,19 @@ class ApplicationController extends ApiController
             'required' => 'O campo :attribute é obrigatorio'
         ];
 
-        $validator = Validator::make($request->all(),$roles,$costumMessages,$attributes);
+        $data = $request->all();
 
-        if($validator->fails()){
-            return $this->errorResponse($validator->errors(),422);
+        foreach ($data as $item) {
+            $validator = Validator::make($item,$roles,$costumMessages,$attributes);
+
+            if($validator->fails()){
+                return $this->errorResponse($validator->errors(),422);
+            }
+
+            $newApplication = Application::create($item);
         }
 
-        $newApplication = Application::create($request->all());
-
-        return $this->showOne($newApplication);
+        return $this->showOne($newApplication,"Canditura submetida com sucesso");
     }
 
     /**

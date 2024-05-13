@@ -48,6 +48,7 @@ Route::post('/candidateAuth',[CandidateController::class,'login']);
 
 Route::group(['middleware' => ['auth:sanctum']], function(){
     Route::post('/logout',[UserController::class,'logout']);
+    Route::post('/logout/candidate',[CandidateController::class,'logout']);
 });
 Route::get('candidateApplications', [CandidateController::class,'candidateApplications']);
 Route::get('candidateApplications/{id}', [CandidateController::class,'candidateApplicationsById']);
@@ -58,6 +59,7 @@ Route::get('job/json',[JobController::class,"getJson"]);
 Route::resource('job',JobController::class)->except(['create','edit']);
 
 Route::resource('candidate',CandidateController::class)->except(['create','edit']);
+Route::get('candidate/verify/data',[CandidateController::class,'verifyData']);
 Route::resource('experience',ExperienceController::class)->except(['create','edit']);
 Route::resource('training',TrainingController::class)->except(['create','edit']);
 

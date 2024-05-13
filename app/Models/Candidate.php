@@ -44,7 +44,8 @@ class Candidate extends Model
         'gender',
         'remote_job',
         'for_travel',
-        'have_children'
+        'have_children',
+        'isArchive'
     ];
 
     public function country(){
