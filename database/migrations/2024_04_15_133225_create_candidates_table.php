@@ -41,6 +41,7 @@ return new class extends Migration
             $table->foreignId('district_id')->nullable();
             $table->foreignId('employee_type_id')->nullable();
             $table->enum("isArchive",['1','2']);
+            $table->string('profilePhoto')->nullable();
             $table->timestamps();
 
             $table->foreign("country_id")->references("id")->on('countries');

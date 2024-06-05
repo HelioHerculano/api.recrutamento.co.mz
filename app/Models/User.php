@@ -74,4 +74,8 @@ class User extends Authenticatable
     public static function generateVerificationCode(){
         return Str::random(40);
     }
+
+    public function accessLevel(){
+        return $this->belongsTo(AccessLevel::class);
+    }
 }

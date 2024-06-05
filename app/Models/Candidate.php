@@ -45,7 +45,8 @@ class Candidate extends Model
         'remote_job',
         'for_travel',
         'have_children',
-        'isArchive'
+        'isArchive',
+        'profilePhoto'
     ];
 
     public function country(){

@@ -13,6 +13,7 @@ use App\Models\Experience;
 use App\Models\Training;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Validator;
 
 class CandidateController extends ApiController
@@ -61,6 +62,12 @@ class CandidateController extends ApiController
             $query = $query->when(request('nuit'), function ($query){
                 if(!empty(request('nuit'))) {
                     $query->where('nuit', '=', request('nuit'));
+                }
+            });
+
+            $query = $query->when(request('isArchive'), function ($query){
+                if(!empty(request('isArchive'))) {
+                    $query->where('isArchive', '=', request('isArchive'));
                 }
             });
 
@@ -159,6 +166,12 @@ class CandidateController extends ApiController
                 });
             }
 
+            $query = $query->when(request('isArchive'), function ($query){
+                if(!empty(request('isArchive'))) {
+                    $query->where('isArchive', '=', request('isArchive'));
+                }
+            });
+
             $query = $query->when(request('approved_status'), function ($query){
                 if(!empty(request('approved_status'))) {
                     $query->where('approved_status', '=', request('approved_status'));
@@ -176,8 +189,8 @@ class CandidateController extends ApiController
 
         public function candidateApplicationsById($id){
              $candidate = Candidate::where('id',$id)->with(['district.province.country','employeeType','experiences','trainings','applications.job.area','employeeType','trainings.trainingType','attachments.documentType','candidateLanguage.language','candidateLanguage.level'])->first();
-
-             return $this->showOne($candidate);
+             
+            return $this->showOne($candidate);
         }
 
     /**
@@ -444,6 +457,15 @@ class CandidateController extends ApiController
         }else{
             return response()->json(["approved"=>true]);
         }
+    }
+
+    public function postProfile(Request $request){
+        if ($request->hasFile('attachment')) {
+            $attachment = $request->file('attachment');
+            $path = $this->uploadProfile($attachment,'profiles');
+        }
+
+        return response()->json(["path"=>$path]);
     }
 
     public function logout(){

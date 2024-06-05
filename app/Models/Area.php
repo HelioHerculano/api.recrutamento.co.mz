@@ -11,4 +11,8 @@ class Area extends Model
 
     const INACTIVE = '0';
     const ACTIVE = '1';
+
+    protected $fillable = [
+        'designation'
+    ];
 }

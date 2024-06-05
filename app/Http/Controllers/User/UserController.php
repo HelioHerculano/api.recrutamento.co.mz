@@ -120,7 +120,7 @@ class UserController extends ApiController
         }
 
         if(Auth::attempt(['email'=>$request->email,'password'=>$request->password])){
-            $user = Auth::user();
+            $user = User::where('id',Auth::user()->id)->with('accessLevel')->first();
             //$success['token'] = $user->createToken('MyApp')->plainTextToken;
             $success['token'] = $request->user()->createToken('MyApp')->plainTextToken;
             $success['user'] = $user;

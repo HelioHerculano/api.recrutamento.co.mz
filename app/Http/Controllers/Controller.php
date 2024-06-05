@@ -21,4 +21,15 @@ class Controller extends BaseController
         // Url is the base url exp: localhost:8000
         return URL::to('/').'/storage/'.$path.'/'.$filename;
     }
+
+    public function uploadProfile($attachment,$path = 'profiles'){
+        if(!$attachment){
+            return null;
+        }
+        // save image
+        $filename = \Storage::disk($path)->put('', $attachment);
+        //return the path
+        // Url is the base url exp: localhost:8000
+        return URL::to('/').'/storage/'.$path.'/'.$filename;
+    }
 }

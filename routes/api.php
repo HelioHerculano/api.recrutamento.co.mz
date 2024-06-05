@@ -12,6 +12,7 @@ use App\Http\Controllers\Job\JobController;
 use App\Http\Controllers\Language\LanguageController;
 use App\Http\Controllers\Level\LevelController;
 use App\Http\Controllers\Province\ProvinceController;
+use App\Http\Controllers\Statistics\Statistics;
 use App\Http\Controllers\Training\TrainingController;
 use App\Http\Controllers\TrainingType\TrainingTypeController;
 use App\Http\Controllers\User\UserController;
@@ -65,6 +66,7 @@ Route::resource('training',TrainingController::class)->except(['create','edit'])
 
 Route::resource('application',ApplicationController::class)->except(['create','edit']);
 
+Route::post('/profile/photo',[CandidateController::class,'postProfile']);
 Route::post('attachment/temp',[AttachmentController::class,'upload']);
 Route::resource('attachment',AttachmentController::class)->except(['create','edit']);
 
@@ -79,5 +81,7 @@ Route::resource('trainingType',TrainingTypeController::class)->except(['create',
 Route::resource('documentType',DocumentTypeController::class)->except(['create','edit']);
 
 Route::resource('area',AreaController::class)->except(['create','edit']);
+
+Route::get('statistics',[Statistics::class,'statistics']);
 
 
