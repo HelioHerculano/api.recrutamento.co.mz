@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Candidate;
 
+use App\Events\CandidateApplication;
 use App\Http\Controllers\ApiController;
 use App\Http\Controllers\Controller;
 use App\Models\Application;
@@ -189,7 +190,7 @@ class CandidateController extends ApiController
 
         public function candidateApplicationsById($id){
              $candidate = Candidate::where('id',$id)->with(['district.province.country','employeeType','experiences','trainings','applications.job.area','employeeType','trainings.trainingType','attachments.documentType','candidateLanguage.language','candidateLanguage.level'])->first();
-             
+
             return $this->showOne($candidate);
         }
 
@@ -348,6 +349,7 @@ class CandidateController extends ApiController
 
                     }
                     if($newAttach != null){
+                        CandidateApplication::dispatch($newCandidate);
                         return $this->showOne($newCandidate);
                     }
                 // }
