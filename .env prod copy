@@ -11,9 +11,9 @@ LOG_LEVEL=debug
 DB_CONNECTION=mysql
 DB_HOST=127.0.0.1
 DB_PORT=3306
-DB_DATABASE=electro_recruta
-DB_USERNAME=electro_admin
-DB_PASSWORD='hmpqAsLDjMUR'
+DB_DATABASE=sistemas_recrutamento.co.mz
+DB_USERNAME=sistemas_admin
+DB_PASSWORD='Brh62}&#M;q&'
 
 BROADCAST_DRIVER=log
 CACHE_DRIVER=file

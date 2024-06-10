@@ -18,7 +18,7 @@ use App\Http\Controllers\TrainingType\TrainingTypeController;
 use App\Http\Controllers\User\UserController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
-
+use Illuminate\Support\Facades\Artisan;
 /*
 |--------------------------------------------------------------------------
 | API Routes
@@ -84,4 +84,11 @@ Route::resource('area',AreaController::class)->except(['create','edit']);
 
 Route::get('statistics',[Statistics::class,'statistics']);
 
-
+Route::get('/run-storage-link', function() {
+    try {
+        Artisan::call('storage:link');
+        return 'Storage link created successfully.';
+    } catch (Exception $e) {
+        return 'Error: ' . $e->getMessage();
+    }
+});
