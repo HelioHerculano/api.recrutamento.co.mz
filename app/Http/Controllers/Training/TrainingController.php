@@ -58,13 +58,15 @@ class TrainingController extends ApiController
      */
     public function store(Request $request)
     {
+
         $roles = [
             'designation' => 'required',
             'institution' => 'required',
             'start_date' => 'required',
             'end_date' => 'required',
             'training_type_id' => 'required',
-            'candidate_id' => 'required'
+            'candidate_id' => 'required',
+            'file' => 'required|file'
         ];
 
         $attributes = [
@@ -73,11 +75,13 @@ class TrainingController extends ApiController
             'start_date' => '"data de inicio"',
             'end_date' => '"data do termino"',
             'training_type_id' => '"nivel"',
-            'candidate_id' => '"candidato"'
+            'candidate_id' => '"candidato"',
+            'file' => '"certificado"'
         ];
 
         $costumMessages = [
-            'required' => 'O campo :attribute é obrigatorio'
+            'required' => 'O campo :attribute é obrigatorio',
+            'file' => 'O campo :attribute deve ser um ficheiro valido'
         ];
 
         $validator = Validator::make($request->all(),$roles,$costumMessages,$attributes);
@@ -86,17 +90,27 @@ class TrainingController extends ApiController
             return $this->errorResponse($validator->errors(),422);
         }
 
-        $newTraining = Training::create($request->all());
+        // dd($request->only(['file']));
 
-        return $this->showOne($newTraining);
+        if ($request->hasFile('file')) {
+            $certificate_path = $request->file('file');
+            $path = $this->saveAttachment($certificate_path,'attachments');
+        }
+
+        $data = $request->except("file");
+        $data['certificate_path'] = $path;
+
+        $newTraining = Training::create($data);
+
+        return $this->showOne($newTraining,'Formação adicionada com sucesso');
     }
 
     /**
      * Display the specified resource.
      */
-    public function show(string $id)
+    public function show(Training $training)
     {
-        //
+        return $this->showOne($training);
     }
 
     /**
@@ -112,14 +126,64 @@ class TrainingController extends ApiController
      */
     public function update(Request $request, string $id)
     {
-        //
+
+        $training = Training::findOrFail($id);
+
+        $roles = [
+            'designation' => 'required',
+            'institution' => 'required',
+            'start_date' => 'required',
+            'end_date' => 'required',
+            'training_type_id' => 'required',
+            'file' => 'nullable'
+        ];
+
+        $attributes = [
+            'designation' => '"designação"',
+            'institution' => '"instituição"',
+            'start_date' => '"data de inicio"',
+            'end_date' => '"data do termino"',
+            'training_type_id' => '"nivel"',
+            'file' => '"certificado"'
+        ];
+
+          $costumMessages = [
+              'required' => 'O campo é obrigatorio'
+          ];
+
+          $validator = Validator::make($request->all(),$roles,$costumMessages,$attributes);
+
+          if($validator->fails()){
+              return $this->errorResponse($validator->errors(),422);
+          }
+
+        $training->fill($request->all());
+
+        // if($training->isClean()){
+        //     return $this->errorResponse('Deve mundar os dados para poder actualizar',422);
+        // }
+
+        if ($request->hasFile('file')) {
+            $certificate_path = $request->file('file');
+            $path = $this->saveAttachment($certificate_path,'attachments');
+            $data = $request->except("file");
+            $data['certificate_path'] = $path;
+        }else{
+            $data = $request->except("file");
+        }
+
+
+        $training->update($data);
+
+        return $this->showOne($training,"Formação actualizada com sucesso");
     }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(string $id)
+    public function destroy(Training $training)
     {
-        //
+        $training->delete();
+        return $this->showMessage("Formação removida com sucesso");
     }
 }

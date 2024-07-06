@@ -15,7 +15,8 @@ class Experience extends Model
         'sector',
         'position',
         'responsibilities',
-        'start_date'
+        'start_date',
+        'end_date'
     ];
 
     public function candidate(){

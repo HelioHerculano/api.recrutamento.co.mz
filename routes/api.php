@@ -63,12 +63,15 @@ Route::resource('candidate',CandidateController::class)->except(['create','edit'
 Route::get('candidate/verify/data',[CandidateController::class,'verifyData']);
 Route::resource('experience',ExperienceController::class)->except(['create','edit']);
 Route::resource('training',TrainingController::class)->except(['create','edit']);
+Route::post('training/{id}',[TrainingController::class,'update']);
 
 Route::resource('application',ApplicationController::class)->except(['create','edit']);
 
 Route::post('/profile/photo',[CandidateController::class,'postProfile']);
 Route::post('attachment/temp',[AttachmentController::class,'upload']);
 Route::resource('attachment',AttachmentController::class)->except(['create','edit']);
+Route::post('attachment/{id}',[AttachmentController::class,'update']);
+
 
 
 Route::resource('country',CountryController::class)->except(['create','edit']);

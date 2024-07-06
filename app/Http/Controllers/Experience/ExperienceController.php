@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Experience;
 use App\Http\Controllers\ApiController;
 use App\Http\Controllers\Controller;
 use App\Models\Experience;
+use App\Models\Training;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 
@@ -60,6 +61,7 @@ class ExperienceController extends ApiController
         $roles = [
             'company' => 'required',
             'position' => 'required',
+            'sector' => 'required',
             'start_date' => 'required',
             'end_date' => 'required',
             'responsibilities' => 'required',
@@ -68,7 +70,8 @@ class ExperienceController extends ApiController
 
         $attributes = [
             'company' => '"empresa"',
-            'position' => '"posição"',
+            'position' => '"cargo"',
+            'sector' => '"sector"',
             'start_date' => '"data de inicio"',
             'end_date' => '"data do termino"',
             'responsibilities' => '"responsabilidades"',
@@ -87,15 +90,15 @@ class ExperienceController extends ApiController
 
         $newExperience = Experience::create($request->all());
 
-        return $this->showOne($newExperience);
+        return $this->showOne($newExperience,"Experiência adicionada com sucesso");
     }
 
     /**
      * Display the specified resource.
      */
-    public function show(string $id)
+    public function show(Experience $experience)
     {
-        //
+        return $this->showOne($experience);
     }
 
     /**
@@ -109,16 +112,53 @@ class ExperienceController extends ApiController
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
+    public function update(Request $request, Experience $experience)
     {
-        //
+        $roles = [
+            'company' => 'required',
+            'position' => 'required',
+            'sector' => 'required',
+            'start_date' => 'required',
+            'end_date' => 'required',
+            'responsibilities' => 'required'
+        ];
+
+        $attributes = [
+            'company' => '"empresa"',
+            'position' => '"cargo"',
+            'sector' => '"sector"',
+            'start_date' => '"data de inicio"',
+            'end_date' => '"data do termino"',
+            'responsibilities' => '"responsabilidades"'
+        ];
+
+        $costumMessages = [
+            'required' => 'O campo :attribute é obrigatorio'
+        ];
+
+        $validator = Validator::make($request->all(),$roles,$costumMessages,$attributes);
+
+        if($validator->fails()){
+            return $this->errorResponse($validator->errors(),422);
+        }
+
+        $experience->fill($request->all());
+
+        if($experience->isClean()){
+            return $this->errorResponse('Deve mundar os dados para poder actualizar',422);
+        }
+
+        $experience->update();
+
+        return $this->showOne($experience,"Experiência actualizada com sucesso");
     }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(string $id)
+    public function destroy(Experience $experience)
     {
-        //
+        $experience->delete();
+        return $this->showMessage("Experiência removida com sucesso");
     }
 }
