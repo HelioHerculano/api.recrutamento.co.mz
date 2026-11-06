@@ -18,8 +18,8 @@ return new class extends Migration
             $table->string('start_date');
             $table->string('end_date');
             $table->string('certificate_path');
-            $table->string('training_type_id');
-            $table->string('candidate_id');
+            $table->foreignId('training_type_id');
+            $table->foreignId('candidate_id');
             $table->timestamps();
 
             $table->foreign('training_type_id')->references('id')->on('training_types');
